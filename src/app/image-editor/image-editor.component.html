@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="editing_menu">
+    <div>
+      <button class="btn btn-primary" (click)="fileInput.click()">Open Image</button>
+      <input type="file" #fileInput (change)="this.onFileSelected($event)" accept="image/*" hidden>
+    </div>
+  </div>
+
+  <div class="canvas">
+    <div cdkDrag class="image-container" *ngIf="this.imageSrc">
+      <img [src]="this.imageSrc" alt="Selected Image">
+    </div>
+  </div>
+</div>

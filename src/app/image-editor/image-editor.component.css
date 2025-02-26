@@ -1,0 +1,40 @@
+.container {
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.editing_menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.canvas{
+  width: 300px;
+  height: 200px;
+  border: 2px dotted gray;
+  background-color: rgba(200, 200, 200, 0.3);
+  position: relative;
+  resize: both;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container {
+  display: inline-block;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
