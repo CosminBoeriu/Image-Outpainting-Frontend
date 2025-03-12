@@ -4,6 +4,14 @@
       <button class="btn btn-primary" (click)="fileInput.click()">Open Image</button>
       <input type="file" #fileInput (change)="this.onFileSelected($event)" accept="image/*" hidden>
     </div>
+    <div class="standard-resolutions">
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(16, 9)">16:9</button>
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(9, 16)">9:16</button>
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(1, 1)">1:1</button>
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 5)">4:5</button>
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 3)">4:3</button>
+      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 3)">3:4</button>
+    </div>
   </div>
 
   <div class="canvas">

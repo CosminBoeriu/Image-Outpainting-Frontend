@@ -1,36 +1,47 @@
 .container {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 4vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  height: 80vh;
+  width: 100%;
+  gap: 3vh;
 }
 
 .editing_menu {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  background-color: rgba(200, 200, 200, 0.3);
+  padding: 1%;
+  flex: 2;
+  height: fit-content;
 }
 
 .canvas{
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   border: 2px dotted gray;
   background-color: rgba(200, 200, 200, 0.3);
   position: relative;
-  resize: both;
   overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
+  flex: 9
 }
 
 .image-container {
   display: inline-block;
   max-width: 100%;
+}
+
+.standard-resolutions{
+  display: grid;
+  columns: 3;
+  grid-column-gap: 1vh;
+  grid-row-gap: 1vh;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1vh;
 }
 
 img {
