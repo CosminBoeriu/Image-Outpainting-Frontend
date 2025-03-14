@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, ViewChild,} from '@angular/core';
 import {NgIf, NgOptimizedImage} from '@angular/common';
 import {CdkDrag, DragDropModule} from '@angular/cdk/drag-drop';
 import {FormsModule} from '@angular/forms';
@@ -14,15 +14,21 @@ import {FormsModule} from '@angular/forms';
   ],
   styleUrls: ['./image-editor.component.css']
 })
-export class ImageEditorComponent {
-  @ViewChild('canvas') myCanvas!: ElementRef;
+export class ImageEditorComponent implements AfterViewInit {
+
+  @ViewChild('canvas', { static: false })  myCanvas!: ElementRef<HTMLCanvasElement>;
+
   imageSrc: string | ArrayBuffer | null | undefined = null;
-  private dimensions: Array<number> = [80, 80]
+  private dimensions: Array<number> = [1, 1]
   private mousePos: Array<number> | null = null;
   private isDragging: boolean = false;
 
-  constructor() {
-     this.resizeCanvas(this.dimensions[0], this.dimensions[1]);
+  constructor() {}
+
+  ngAfterViewInit() {
+    if (this.myCanvas?.nativeElement) {
+      this.resizeCanvas(this.dimensions[0], this.dimensions[1]);
+    }
   }
 
   onFileSelected(event: Event) {
@@ -44,10 +50,9 @@ export class ImageEditorComponent {
   }
 
   resizeCanvas(width: number, height: number) {
-    this.myCanvas.nativeElement.width.vh = width;
-    this.myCanvas.nativeElement.height.vh = height;
+    const h = 500
+    const w = h * width / height;
+    this.myCanvas.nativeElement.style.width = `${w}px`;
+    this.myCanvas.nativeElement.style.height = `${h}px`;
   }
-
-
-
 }

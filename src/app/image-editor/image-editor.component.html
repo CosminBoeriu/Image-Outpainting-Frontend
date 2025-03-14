@@ -2,21 +2,26 @@
   <div class="editing_menu">
     <div>
       <button class="btn btn-primary" (click)="fileInput.click()">Open Image</button>
-      <input type="file" #fileInput (change)="this.onFileSelected($event)" accept="image/*" hidden>
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
     </div>
     <div class="standard-resolutions">
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(16, 9)">16:9</button>
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(9, 16)">9:16</button>
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(1, 1)">1:1</button>
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 5)">4:5</button>
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 3)">4:3</button>
-      <button class="btn btn-secondary" (click)="this.resizeCanvas(4, 3)">3:4</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(16, 9)">16:9</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(9, 16)">9:16</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(1, 1)">1:1</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(4, 5)">4:5</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(4, 3)">4:3</button>
+      <button class="btn btn-secondary" (click)="resizeCanvas(3, 4)">3:4</button>
     </div>
   </div>
 
-  <div class="canvas">
-    <div cdkDrag class="image-container" *ngIf="this.imageSrc">
-      <img [src]="this.imageSrc" alt="Selected Image">
-    </div>
+
+
+  <div style="align-content: center">
+    <section #canvas class="canvas">
+      <div cdkDrag class="image-container" *ngIf="imageSrc">
+        <img style="z-index: 99" [src]="imageSrc" alt="Selected Image">
+      </div>
+    </section>
+
   </div>
 </div>

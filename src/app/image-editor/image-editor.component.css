@@ -2,7 +2,8 @@
   text-align: center;
   margin-top: 4vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   height: 80vh;
   width: 100%;
   gap: 3vh;
@@ -16,6 +17,7 @@
   padding: 1%;
   flex: 2;
   height: fit-content;
+  max-height: fit-content;
 }
 
 .canvas{
