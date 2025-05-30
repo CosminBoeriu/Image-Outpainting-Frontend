@@ -1,35 +1,37 @@
-.container {
-  text-align: center;
-  margin-top: 4vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 80vh;
-  width: 100%;
-  gap: 3vh;
-}
-
-.editing_menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(200, 200, 200, 0.3);
-  padding: 1%;
-  flex: 2;
-  height: fit-content;
-  max-height: fit-content;
-}
-
-.canvas{
+:host {
+  display: block;
   width: 100%;
   height: 100%;
-  border: 2px dotted gray;
-  background-color: rgba(200, 200, 200, 0.3);
-  position: relative;
-  overflow: hidden;
+}
+
+.editor-div{
   display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 90vw;
+}
+
+.canvas-wrapper {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  flex: 9
+  /* inherit whatever size the parent gives you: */
+  width: 100%;
+  height: 100%;
+}
+
+/* now the <canvas> itself will be at most 70% of its wrapper, centered */
+canvas {
+  /* never grow beyond 70% of wrapper’s width/height */
+  max-width:  100%;
+  max-height: 100%;
+
+  /* maintain aspect ratio automatically */
+  width: auto;
+  height: auto;
+
+  /* optional styling: */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 .image-container {
@@ -51,3 +53,96 @@ img {
   height: auto;
   display: block;
 }
+
+
+
+
+
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* center horizontally */
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+/* Center each row of buttons or text */
+.editor-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* center children */
+  gap: 0.1rem;
+  width: 100%;            /* so inner centering works */
+  text-align: center;     /* for the .error-text */
+}
+
+/* Center buttons within each horizontal group */
+.horiz-buttons {
+  display: flex;
+  justify-content: center; /* center buttons */
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Base style for all action buttons */
+.edit-button {
+  padding: 0.6rem 1.2rem;
+  background-color: #FFD0C7;   /* light pink */
+  border: 2px solid #E69DB8;   /* deeper pink border */
+  border-radius: 4px;
+  color: #333;                 /* dark text for contrast */
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Hover and focus states */
+.edit-button:hover,
+.edit-button:focus {
+  background-color: #E69DB8;   /* deepen on hover */
+  border-color: #FFD0C7;       /* invert border */
+  color: #fff;                 /* white text */
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Download buttons get a white background and pink text */
+.edit-button.download-button {
+  background-color: #fff;
+  border-color: #E69DB8;
+  color: #E69DB8;
+}
+
+.edit-button.download-button:hover,
+.edit-button.download-button:focus {
+  background-color: #E69DB8;
+  border-color: #FFD0C7;
+  color: #fff;
+}
+
+/* Disabled state for any button */
+.edit-button:disabled {
+  background-color: #f5f5f5;   /* light gray */
+  border-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Error / instruction text */
+.error-text {
+  color: #666;                /* medium gray */
+  font-size: 0.95rem;
+  font-style: italic;
+  padding: 0.2rem 0.2rem;
+
+}
+

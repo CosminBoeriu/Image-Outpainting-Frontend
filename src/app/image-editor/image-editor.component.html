@@ -1,27 +1,39 @@
-<div class="container">
-  <div class="editing_menu">
-    <div>
-      <button class="btn btn-primary" (click)="fileInput.click()">Open Image</button>
-      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
-    </div>
-    <div class="standard-resolutions">
-      <button class="btn btn-secondary" (click)="resizeCanvas(16, 9)">16:9</button>
-      <button class="btn btn-secondary" (click)="resizeCanvas(9, 16)">9:16</button>
-      <button class="btn btn-secondary" (click)="resizeCanvas(1, 1)">1:1</button>
-      <button class="btn btn-secondary" (click)="resizeCanvas(4, 5)">4:5</button>
-      <button class="btn btn-secondary" (click)="resizeCanvas(4, 3)">4:3</button>
-      <button class="btn btn-secondary" (click)="resizeCanvas(3, 4)">3:4</button>
-    </div>
+<div class="editor-div">
+  <div class="canvas-wrapper">
+    <canvas #canvas [hidden]="!imageSrc" (click)="onCanvasClick($event)"
+            (mousemove)="onCanvasMouseMove($event)"></canvas>
   </div>
-
-
-
-  <div style="align-content: center">
-    <section #canvas class="canvas">
-      <div cdkDrag class="image-container" *ngIf="imageSrc">
-        <img style="z-index: 99" [src]="imageSrc" alt="Selected Image">
+  <div class="buttons" [hidden]="!imageSrc">
+    <div class="editor-buttons" [hidden]="currentMode !== null">
+      <div class="error-text">
+        Please select and editing mode!
       </div>
-    </section>
-
+    </div>
+    <div class="editor-buttons" [hidden]="currentMode !== 'outpaint'">
+      <div class="horiz-buttons">
+        <button class="edit-button" (click)="onOutpaint()" >Outpaint</button>
+      </div>
+    </div>
+    <div class="editor-buttons" [hidden]="currentMode !== 'inpaint'">
+      <div class="horiz-buttons">
+        <button class="edit-button" [disabled]="!hasSelection" (click)="onInpaint()">Inpaint</button>
+      </div>
+      <div class="error-text" *ngIf="!hasSelection">
+        Please select an area to inpaint!
+      </div>
+    </div>
+    <div class="editor-buttons" [hidden]="currentMode !== 'blend'">
+      <div class="horiz-buttons">
+        <button class="edit-button" [disabled]="!hasSelection" (click)="onBlend()"> Blend</button>
+        <button class="edit-button" (click)="secondaryInput.click()">Upload secondary image</button>
+        <input #secondaryInput type="file" accept="image/*" (change)="onSecondaryImageSelected($event)" hidden>
+      </div>
+      <div class="error-text" *ngIf="!secondarySrc">
+        Please select a secondary image to blend with!
+      </div>
+      <div class="error-text" *ngIf="!hasSelection && secondarySrc">
+        Please select an area to blend!
+      </div>
+    </div>
   </div>
 </div>

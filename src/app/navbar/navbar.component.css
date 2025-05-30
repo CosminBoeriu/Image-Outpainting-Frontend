@@ -1,3 +1,71 @@
 .navbar {
+  height: 6vh;
   padding: 10px;
+  background: linear-gradient(to right, #E69DB8, #FFD0C7);
+}
+
+button{
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-link{
+  color: black;
+}
+
+.nav-link:hover{
+  color: #FFD0C7;
+}
+
+.divider{
+  cursor: default;
+  padding-right:0.4vw;
+}
+
+#nav-link-register{
+  white-space: nowrap;             /* 1. Prevent wrapping */
+  padding: 0.5rem 0.5rem;            /* 2. Space inside the button */
+  background-color: transparent;       /* 3. Background color */
+  color: black;                    /* 4. Text color */
+  border: none;                    /* 5. Remove default border */
+  border-radius: 10px;             /* 6. Rounded corners */
+  cursor: pointer;                 /* 7. Cursor on hover */
+  font-size: 1rem;
+}
+
+#nav-link-register:hover{
+  background-color: #FFD0C7;
+  color:white;
+}
+
+
+.navbar-div{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1%;
+  gap: 1%;
+}
+
+.toggle-button{
+  width: 32px; /* or whatever fits your layout */
+  height: 32px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.toggle-button:hover{
+  background: #ed8aae;
+  /* border: 1px solid gray; */
+  cursor: pointer;
+}
+
+.openCloseButtonText{
+  background: none;
 }

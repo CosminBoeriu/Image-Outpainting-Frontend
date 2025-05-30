@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+html, body, app-root {
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0;
+  width: 100vw;
+}
+
+.btn.button_menu.active,
+.btn.button_menu:active,
+.btn.button_menu.active:hover,
+.btn.button_menu:active:hover {
+  background-color: #E69DB8 !important;
+  border-color:    #E69DB8 !important;
+}

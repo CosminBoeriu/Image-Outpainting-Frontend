@@ -1,0 +1,27 @@
+<div class="sidebar" *ngIf="isSidebarOpen">
+    <ng-container class="sidebar-menu" *ngIf="currentRoute === '/image-editor'; else homeButtons">
+      <button class="btn button_menu" (click)="fileInput.click()">Open Image</button>
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+      <button (click)="modeService.setMode('outpaint')"
+              [class.active]="selectedMode === 'outpaint'"
+              class="btn button_menu">
+        Outpaint
+      </button>
+      <button (click)="modeService.setMode('inpaint')"
+              [class.active]="selectedMode === 'inpaint'"
+              class="btn button_menu">
+        Inpaint
+      </button>
+      <button (click)="modeService.setMode('blend')"
+              [class.active]="selectedMode === 'blend'"
+              class="btn button_menu">
+        Blend
+      </button>
+    </ng-container>
+
+    <ng-template #homeButtons>
+      <button class="btn button_menu" routerLink="/image-editor">Edit Image</button>
+      <button class="btn button_menu" routerLink="/History">History</button>
+      <button class="btn button_menu" routerLink="/Profile">Profile</button>
+    </ng-template>
+</div>

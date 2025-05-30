@@ -1,0 +1,42 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #F1E7E7;
+  width: 10vw;
+  height: 94vh;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  color: white;
+  text-decoration: none;
+}
+nav a i {
+  margin-right: 0.5rem;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+.button_menu:hover{
+  background-color: #E69DB8;
+}
+
+button_menu:active{
+  background-color: #E69DB8;
+}
+
+.sidebarmenu {
+  display: flex;
+  flex-direction: column;
+}

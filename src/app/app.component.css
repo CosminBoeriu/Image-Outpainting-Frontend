@@ -1,0 +1,15 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 94vh;
+  width: 100vw;
+}
+
+.content{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 94vh;
+}
