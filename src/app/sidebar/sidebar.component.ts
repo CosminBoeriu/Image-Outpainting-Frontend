@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {filter} from 'rxjs';
 import {ImageStateService} from '../services/image-share.service';
 import {ImageMode, ModeStateService} from '../services/mode-share.service';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,13 +19,16 @@ import {ImageMode, ModeStateService} from '../services/mode-share.service';
 export class SidebarComponent {
   imageSrc: string | ArrayBuffer | null | undefined = null;
   selectedMode: ImageMode = null;
-
+  isLoggedIn = false;
   currentRoute: string = '';
   @Input() isSidebarOpen!: boolean;
 
-  constructor(private router: Router, private imageService: ImageStateService, public modeService: ModeStateService) {}
+  constructor(private router: Router, private imageService: ImageStateService, public modeService: ModeStateService, public authService: AuthService) {}
 
   ngOnInit() {
+    this.authService.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
     // Subscribe to router events to keep currentRoute updated
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -42,11 +46,11 @@ export class SidebarComponent {
 
       reader.onload = () => {
         this.imageService.setImage(reader.result); // 🔄 share image
+        target.value = '';
       };
       reader.readAsDataURL(file);
     }
   }
-
 }
 
 

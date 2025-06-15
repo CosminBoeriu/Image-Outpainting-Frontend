@@ -1,19 +1,17 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {NgIf, NgOptimizedImage} from '@angular/common';
-import {CdkDrag, DragDropModule} from '@angular/cdk/drag-drop';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {ImageStateService} from '../services/image-share.service';
 import {ImageMode, ModeStateService} from '../services/mode-share.service';
-import {Subscription} from 'rxjs';
-import {ApiService} from '../services/api.service';
+import {filter, interval, Subscription, switchMap} from 'rxjs';
+import {ApiService, StartResponse, StatusResponse} from '../services/api.service';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-image-editor',
   templateUrl: './image-editor.component.html',
   imports: [
     NgIf,
-    NgOptimizedImage,
-    CdkDrag,
     FormsModule
   ],
   styleUrls: ['./image-editor.component.css']
@@ -27,6 +25,10 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
   currentMode: ImageMode = null;
   hasSelection = false;
   resultBlob: Blob | null    = null;
+  private pollSubscription: Subscription | null = null;
+  public task_progress_number = -1;
+  public task_is_active = false;
+  public task_message: string | null = null;
 
   private sub = new Subscription();
 
@@ -40,10 +42,12 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
   private startY   = 0;
   private curX     = 0;
   private curY     = 0;
+  private task_id = -1;
 
   constructor(private imageService: ImageStateService, private modeService: ModeStateService, private api: ApiService) {}
 
   ngOnInit() {
+
     this.sub.add(
       this.modeService.mode$.subscribe(m => {
         this.currentMode = m;
@@ -56,6 +60,7 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
   }
 
   ngAfterViewInit() {
+    this.drawBackgroundImage();
     this.imageService.imageSrc$.subscribe(src => {
       this.imageSrc = src as string;
       this.hasSelection = false;
@@ -66,6 +71,7 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
   }
   ngOnDestroy() {
     // clean up mode subscription
+    this.onCancelClick()
     this.sub.unsubscribe();
   }
 
@@ -105,8 +111,19 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
     return new Blob([view], { type: mime });
   }
 
+  private blobUrlToBlob(blobUrl: string): Promise<Blob> {
+    return fetch(blobUrl).then(res => {
+      if (!res.ok) {
+        throw new Error(`Failed to fetch blob URL (status ${res.status})`);
+      }
+      return res.blob();
+    });
+  }
+
+
   /** Draws the image at 90% size, centers it, *and* stores its draw‐box. */
   private drawBackgroundImage() {
+    if (!this.baseImage) return;
     const canvas = this.myCanvas.nativeElement;
     const ctx    = canvas.getContext('2d')!;
     const img    = this.baseImage;
@@ -261,9 +278,21 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
 
   onOutpaint() {
     if (!this.imageSrc) return;
-    const blob = this.dataURLtoBlob(this.imageSrc);
-    this.api.outpaint(blob)
-      .subscribe(b => this.handleResult(b));
+    if (this.imageSrc.startsWith('blob:')) {
+      this.blobUrlToBlob(this.imageSrc).then(blob => {
+          this.api.outpaint(blob).subscribe(
+            b => this.handleRequestStartResult(b),
+          )}
+        )
+    }
+    else if (this.imageSrc.startsWith('data:')) {
+      const blob = this.dataURLtoBlob(this.imageSrc);
+      this.api.outpaint(blob).subscribe(
+        b => this.handleRequestStartResult(b),
+      );
+    } else {
+      console.error('Unsupported imageSrc format:', this.imageSrc);
+    }
   }
 
   onInpaint() {
@@ -279,12 +308,19 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
       width:  Math.round(Math.abs(this.curX-this.startX)*scaleX),
       height: Math.round(Math.abs(this.curY-this.startY)*scaleY)
     };
-
-    const blob = this.dataURLtoBlob(this.imageSrc);
-    this.api.inpaint(blob, rectBox)
-      .subscribe(b => this.handleResult(b));
+    if (this.imageSrc.startsWith('blob:')) {
+      this.blobUrlToBlob(this.imageSrc).then(blob => {
+        this.api.inpaint(blob, rectBox).subscribe(b => this.handleRequestStartResult(b))
+      })
+    }
+    else if (this.imageSrc.startsWith('data:')) {
+      const blob = this.dataURLtoBlob(this.imageSrc);
+      this.api.inpaint(blob, rectBox).subscribe(b => this.handleRequestStartResult(b));
+    } else {
+      console.error('Unsupported imageSrc format:', this.imageSrc);
+    }
   }
-
+  /*
   onBlend() {
     if (!this.imageSrc || !this.secondarySrc || !this.hasSelection || !this.imageBox) return;
 
@@ -304,13 +340,111 @@ export class ImageEditorComponent implements AfterViewInit, OnDestroy, OnInit{
     this.api.blend(primaryBlob, secondaryBlob, { rectBox })
       .subscribe(b => this.handleResult(b));
   }
+  */
+
 
   // common result handler
-  private handleResult(blob: Blob) {
+  private handleRequestStartResult(result: StartResponse) {
+    this.task_id = result.task_id;
+    this.task_is_active = true;
+    this.pollSubscription = interval(3000).pipe(
+      switchMap(() => this.api.get_task_status(this.task_id))
+    ).subscribe({
+      next: (s: StatusResponse) => {
+        console.log('progress:', s.progress, 'message:', s.message, 'status:', s.status);
+        this.task_progress_number = s.progress;
+        this.task_message = s.message;
+        if (s.status === 'DONE') {
+          this.pollSubscription?.unsubscribe();
+          this.api.get_task_result(this.task_id).subscribe({
+            next: (blob: Blob) => {
+              this.downloadBlob(blob);
+              this.onResultBlob(blob);
+              this.task_progress_number = -1;
+              this.task_message = '';
+              this.task_is_active = false;
+            },
+            error: err => {
+              console.error('Error fetching result image:', err);
+              this.task_progress_number = -1;
+              this.task_message = '';
+              this.task_is_active = false;
+            }
+          });
+        }
+
+        if (s.status === 'ERROR' || s.status === 'CANCELED') {
+          this.pollSubscription?.unsubscribe();
+          console.error('Task failed:', s.message);
+          this.task_progress_number = -1;
+          this.task_message = '';
+          this.task_is_active = false;
+        }
+      },
+      error: err => {
+        console.error('Poll error:', err);
+        this.task_progress_number = -1;
+        this.task_message = '';
+        this.task_is_active = false;
+      }
+    });
+  }
+
+  private onResultBlob(blob: Blob) {
     this.resultBlob = blob;
-    this.imageSrc   = URL.createObjectURL(blob);
-    this.hasSelection = false;
-    this.loadAndDrawImage(this.imageSrc!);
+    const url = URL.createObjectURL(blob);
+    this.imageSrc = url;
+    const img = new Image();
+    img.onload = () => {
+      this.baseImage = img;
+      this.drawBackgroundImage();
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      console.error('Failed to load blob into <img>');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+
+  public onCancelClick() {
+    if (this.task_id < 0) { return; }
+    this.api.cancelTask(this.task_id).subscribe({
+      next: resp => {
+        this.task_progress_number = -1;
+        this.task_message = '';
+        this.task_is_active = false;
+        this.pollSubscription?.unsubscribe();
+      },
+      error: err => {
+        console.error('Error sending cancel request:', err);
+        this.task_message = 'Error: could not send cancel request';
+        this.task_progress_number = -1;
+        this.task_message = '';
+        this.task_is_active = false;
+      }
+    });
+  }
+
+  private downloadBlob(blob: Blob) {
+    // 1) Create the object URL
+    const objectUrl = window.URL.createObjectURL(blob);
+
+    // 2) Build an <a> pointing to it
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = 'result.png';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+
+    // 3) Use setTimeout to ensure the click happens “just after” a user event
+    setTimeout(() => {
+      a.click();
+
+      // 4) Cleanup: remove <a> and revoke the URL
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(objectUrl);
+    }, 0);
   }
 
 }

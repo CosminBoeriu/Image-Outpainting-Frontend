@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg">
   <div class="navbar-div">
     <button class="toggle-button" (click)="onToggleClick()">
-      {{ isSidebarOpen ? '𐌗' : '☰' }}
+
+      <img *ngIf="isSidebarOpen" class="toggle-icon" src="/assets/close.png" alt="logo">
+      <img *ngIf="!isSidebarOpen" class="toggle-icon" src="/assets/menu.png" alt="logo">
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
@@ -17,6 +19,9 @@
     </div>
     <div>
       <button id="nav-link-register" *ngIf="!this.isLoggedIn" (click)="register()">Get Started</button>
+    </div>
+    <div class="navbar-user" *ngIf="isLoggedIn">
+      Welcome, {{ username }}
     </div>
   </div>
 </nav>

@@ -10,10 +10,12 @@ import {Router} from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  errorMessage = '';
+  errorMessage: string | null  = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
@@ -36,12 +38,13 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
-          console.log('Login success:', res);
+          this.errorMessage = null;
           this.router.navigate(['/home']); // change to your desired route
         },
         error: (err) => {
-          console.error('Login error:', err);
-          this.errorMessage = 'Invalid email or password';
+          if (err.message) {
+            this.errorMessage = err.error.message;
+          }
         }
       });
     }

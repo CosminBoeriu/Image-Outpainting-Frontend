@@ -12,16 +12,10 @@
               class="btn button_menu">
         Inpaint
       </button>
-      <button (click)="modeService.setMode('blend')"
-              [class.active]="selectedMode === 'blend'"
-              class="btn button_menu">
-        Blend
-      </button>
     </ng-container>
 
     <ng-template #homeButtons>
-      <button class="btn button_menu" routerLink="/image-editor">Edit Image</button>
-      <button class="btn button_menu" routerLink="/History">History</button>
-      <button class="btn button_menu" routerLink="/Profile">Profile</button>
+      <button class="btn button_menu" *ngIf="isLoggedIn" routerLink="/image-editor">Edit Image</button>
+      <button class="btn button_menu" *ngIf="!isLoggedIn" routerLink="/login">Log in to access our tool</button>
     </ng-template>
 </div>

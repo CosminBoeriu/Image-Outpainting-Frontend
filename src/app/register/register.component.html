@@ -9,8 +9,17 @@
     <input formControlName="password" type="password" placeholder="Password" />
   </div>
   <div class="login-from-input">
-    <input formControlName="password" type="password" placeholder="Confirm Password" />
+    <input formControlName="confirmPassword" type="password" placeholder="Confirm Password" />
   </div>
   <button type="submit">Login</button>
-
+  <div class="already-account">
+    <span>Already have an account?</span>
+    <a routerLink="/login" class="btn btn-secondary btn-sm">Login</a>
+  </div>
 </form>
+
+<div class="error-message">
+  <div *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+</div>

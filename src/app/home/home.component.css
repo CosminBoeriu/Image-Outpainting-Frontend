@@ -1,0 +1,112 @@
+:root {
+  --primary-color:   #E69DB8;
+  --secondary-color: #FFD0C7;
+  --text-color:      #333;
+  --card-bg:         #fff;
+  --card-shadow:     rgba(0,0,0,0.05);
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: #f7f3f8;
+}
+.hero h1 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+.hero p {
+  margin: 1rem 0 2rem;
+  color: var(--text-color);
+}
+
+/* Button Group */
+.button-group {
+  display: inline-flex;  /* or flex */
+  gap: 1rem;             /* <-- space between items */
+}
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary (Image Editor) */
+.btn-primary {
+  background-color: #E69DB8;
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: #cc8ca5; /* slightly darker */
+  transform: translateY(-2px);
+}
+.btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(230, 157, 184, 0.4);
+}
+
+/* Secondary (Register) */
+.btn-secondary {
+  background-color: #FFD0C7;
+  color: #333333;
+}
+.btn-secondary:hover {
+  background-color: #ffc0b5; /* slightly darker */
+  color: #111111;
+  transform: translateY(-2px);
+}
+.btn-secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 208, 199, 0.5);
+}
+
+
+/* Features grid */
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 1rem;
+}
+.feature-card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  overflow: hidden;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+.feature-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.feature-card h2 {
+  margin: 1rem 0 0.5rem;
+  color: var(--primary-color);
+}
+.feature-card p {
+  padding: 0 1rem 1.5rem;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #777;
+  font-size: 0.9rem;
+}

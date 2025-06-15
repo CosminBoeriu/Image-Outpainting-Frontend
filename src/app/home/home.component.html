@@ -1,1 +1,23 @@
-<p>home works!</p>
+<section class="hero">
+  <h1>AI Image Inpaint &amp; Outpaint</h1>
+  <p>Enhance and extend your images seamlessly with our AI-powered editor.</p>
+  <div class="button-group">
+    <button *ngIf="isLoggedIn" (click)="goAndReload()" class="btn btn-primary">Image Editor</button>
+    <a *ngIf="!isLoggedIn" routerLink="/register"      class="btn btn-secondary">Register</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <h2>Inpaint</h2>
+    <p>Remove unwanted objects and restore missing areas in your photos.</p>
+  </div>
+  <div class="feature-card">
+    <h2>Outpaint</h2>
+    <p>Extend your images beyond the frame and unleash creative possibilities.</p>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; Boeriu George Cosmin - Licenta 2025</p>
+</footer>

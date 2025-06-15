@@ -1,4 +1,34 @@
 <div class="editor-div">
+  <div class="editor-start" [hidden]="imageSrc">
+    <section class="tutorial">
+      <h2>Welcome to AI Image Editor</h2>
+      <p>To get started, pick an image from the sidebar.</p>
+
+      <div class="features">
+        <!-- Outpaint card -->
+        <div class="feature-card">
+          <div class="icon outpaint-icon"></div>
+          <h3>Outpaint</h3>
+          <p>
+            Select an image and click “Outpaint” to extend your canvas<br/>
+            beyond its original borders.
+          </p>
+        </div>
+
+        <!-- Inpaint card -->
+        <div class="feature-card">
+          <div class="icon inpaint-icon"></div>
+          <h3>Inpaint</h3>
+          <p>
+            Select an image, then draw a square over the area you want<br/>
+            to repair, remove, or replace.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
   <div class="canvas-wrapper">
     <canvas #canvas [hidden]="!imageSrc" (click)="onCanvasClick($event)"
             (mousemove)="onCanvasMouseMove($event)"></canvas>
@@ -11,28 +41,39 @@
     </div>
     <div class="editor-buttons" [hidden]="currentMode !== 'outpaint'">
       <div class="horiz-buttons">
-        <button class="edit-button" (click)="onOutpaint()" >Outpaint</button>
+        <button class="edit-button" *ngIf="!task_is_active" (click)="onOutpaint()" >Outpaint</button>
+        <button class="edit-button" *ngIf="task_is_active" (click)="onCancelClick()" >Cancel</button>
+      </div>
+      <div class="status-container" *ngIf="task_message">
+          <span class="status-message">
+            {{ task_message }}
+          </span>
+        <div class="progress-wrapper" *ngIf="task_progress_number >= 0">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="task_progress_number"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="editor-buttons" [hidden]="currentMode !== 'inpaint'">
       <div class="horiz-buttons">
-        <button class="edit-button" [disabled]="!hasSelection" (click)="onInpaint()">Inpaint</button>
+        <button class="edit-button" [disabled]="!hasSelection" *ngIf="!task_is_active" (click)="onInpaint()">Inpaint</button>
+        <button class="edit-button" *ngIf="task_is_active" (click)="onCancelClick()" >Cancel</button>
       </div>
-      <div class="error-text" *ngIf="!hasSelection">
-        Please select an area to inpaint!
+      <div class="status-container" *ngIf="task_message">
+          <span class="status-message">
+            {{ task_message }}
+          </span>
+        <div class="progress-wrapper" *ngIf="task_progress_number >= 0">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="task_progress_number"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="editor-buttons" [hidden]="currentMode !== 'blend'">
-      <div class="horiz-buttons">
-        <button class="edit-button" [disabled]="!hasSelection" (click)="onBlend()"> Blend</button>
-        <button class="edit-button" (click)="secondaryInput.click()">Upload secondary image</button>
-        <input #secondaryInput type="file" accept="image/*" (change)="onSecondaryImageSelected($event)" hidden>
-      </div>
-      <div class="error-text" *ngIf="!secondarySrc">
-        Please select a secondary image to blend with!
-      </div>
-      <div class="error-text" *ngIf="!hasSelection && secondarySrc">
-        Please select an area to blend!
+      <div class="status-container" >
+        <span class="error-text" *ngIf="!hasSelection">
+            Please select an area to inpaint!
+          </span>
       </div>
     </div>
   </div>

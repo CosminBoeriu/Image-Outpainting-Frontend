@@ -77,6 +77,7 @@ img {
   gap: 0.1rem;
   width: 100%;            /* so inner centering works */
   text-align: center;     /* for the .error-text */
+  height: 100%;
 }
 
 /* Center buttons within each horizontal group */
@@ -114,6 +115,15 @@ img {
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
+.edit-button:hover,
+.edit-button:focus {
+  background-color: #E69DB8;   /* deepen on hover */
+  border-color: #FFD0C7;       /* invert border */
+  color: #fff;                 /* white text */
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
 /* Download buttons get a white background and pink text */
 .edit-button.download-button {
   background-color: #fff;
@@ -142,7 +152,173 @@ img {
   color: #666;                /* medium gray */
   font-size: 0.95rem;
   font-style: italic;
-  padding: 0.2rem 0.2rem;
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;       /* small space between text and bar */
+  font-size: 0.9rem; /* adjust as needed */
+  margin-top: 1rem;  /* spacing above */
+}
+
+/* The message (or error) text */
+.status-message {
+  flex-shrink: 0;     /* never shrink below its text width */
+  color: #333;        /* normal text color */
+  line-height: 1.2;
+}
+
+/* If it’s an error, turn the text red */
+.status-message.error {
+  color: #c00;
+}
+
+/* Wrapper around the progress‐bar, fixed height and width */
+.progress-wrapper {
+  flex-grow: 1;        /* let the bar take remaining horizontal space */
+  min-width: 100px;    /* or whatever minimum width you need */
+  max-width: 300px;    /* cap it so it never gets too wide */
+}
+
+/* The “track” (light gray background) */
+.progress-bar {
+  width: 100%;
+  height: 4px;           /* very slim bar */
+  background-color: #b3b3b3;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* The “fill” (orange) that grows from 0 → 100% */
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #E69DB8, #FFD0C7);
+  transition: width 0.25s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+:root {
+  --primary-color:   #E69DB8;
+  --secondary-color: #FFD0C7;
+  --bg-light:        #f9f7f9;
+  --text-color:      #333;
+  --card-bg:         #fff;
+  --card-shadow:     rgba(0,0,0,0.05);
+}
+
+/* Overall layout */
+.editor-start {
+  display: flex;
+  height: 100%;
+  min-height: calc(100vh - 60px); /* adjust if you have a header */
+  background: var(--bg-light);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: var(--card-bg);
+  border-right: 1px solid #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-placeholder {
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* Tutorial area */
+.tutorial {
+  flex: 1;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.tutorial h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.tutorial p {
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+/* Feature cards */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  padding: 1.5rem;
+  width: 240px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+}
+.feature-card h3 {
+  margin: 1rem 0 0.5rem;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+}
+.feature-card p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+/* Icons (replace with your SVGs if you like) */
+.icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+.outpaint-icon {
+  background: var(--primary-color);
+}
+.inpaint-icon {
+  background: var(--secondary-color);
+}
+
+
+
 

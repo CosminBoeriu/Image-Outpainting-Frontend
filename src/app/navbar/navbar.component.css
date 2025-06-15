@@ -40,13 +40,7 @@ button{
 }
 
 
-.navbar-div{
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 1%;
-  gap: 1%;
-}
+
 
 .toggle-button{
   width: 32px; /* or whatever fits your layout */
@@ -61,11 +55,34 @@ button{
 }
 
 .toggle-button:hover{
-  background: #ed8aae;
-  /* border: 1px solid gray; */
   cursor: pointer;
 }
 
 .openCloseButtonText{
   background: none;
+}
+
+.navbar-div{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1%;
+  gap: 1%;
+  flex-wrap: nowrap;
+}
+
+.navbar-user {
+  margin-left: auto;
+  font-weight: 500;
+  color: black;
+  padding-left: 2rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.toggle-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-bottom: 0.1rem;
+  object-fit: contain; /* ensures the icon scales without distortion */
 }

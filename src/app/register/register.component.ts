@@ -9,21 +9,24 @@ import {
   Validators
 } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-register',
   imports: [
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf,
+    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
-  errorMessage: string = '';
+  errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private authService: AuthService) {
     this.registerForm = this.fb.group({
@@ -43,27 +46,27 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       username: [''],
       email: [''],
-      password: ['']
+      password: [''],
+      confirmPassword: ['']
     });
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
-      const { username, email, password } = this.registerForm.value;
-      console.log('Registering:', { username, email });
-
+      const { username, email, password, confpass } = this.registerForm.value;
+      if (this.passwordMatchValidator(this.registerForm)) {
+        this.errorMessage = 'Passwords do not match';
+        return
+      }
       this.authService.register({ username, email, password }).subscribe({
         next: (res) => {
-          console.log('Registration successful:', res);
+          this.errorMessage = null;
           this.router.navigate(['/home']); // or auto-login if preferred
         },
         error: (err) => {
-          console.error('Registration error:', err);
-          this.errorMessage = 'Registration failed';
+          this.errorMessage = err.error.message;
         }
       });
-    } else if (this.registerForm.hasError('mismatch')) {
-      this.errorMessage = 'Passwords do not match';
     }
   }
 }

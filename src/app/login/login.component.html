@@ -7,3 +7,9 @@
   </div>
   <button type="submit">Login</button>
 </form>
+
+<div class="error-message">
+  <div *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+</div>

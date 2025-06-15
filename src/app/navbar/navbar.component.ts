@@ -20,12 +20,16 @@ export class NavbarComponent {
   @Output() toggle = new EventEmitter<void>();
   @Input() isSidebarOpen!: boolean;
   isLoggedIn = false;
+  public username: string | null = null
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+    });
+    this.authService.username$.subscribe(username => {
+      this.username = username;
     });
   }
 
